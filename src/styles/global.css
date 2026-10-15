@@ -1,154 +1,373 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+/* ═══════════════════════════════════════════════════════════════════════════
+   retrychx / blog — global styles
+
+   System: warm paper in light, warm charcoal in dark, and exactly one accent
+   (the Meditor brand red) used only for hairlines, underlines and small marks.
+   No gradients, no glows, no coloured type.
+
+   Split of responsibilities:
+     global.css  → tokens, base, prose (markdown output), utility classes
+     *.astro     → per-component chrome, scoped
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+	color-scheme: light dark;
+
+	/* warm paper */
+	--paper: #f6f4f0;
+	--paper-sunk: #efeae1;
+	--ink: #1c1a17;
+	--ink-soft: #4a4640;
+	--muted: #8a857c;
+	--rule: #e3ddd3;
+
+	/* the only accent — kept for lines and marks, plus a darker step for
+	   link text so it clears WCAG AA (5.2:1) on the paper background */
+	--accent: #dd4c4f;
+	--accent-ink: #b9383b;
+	--accent-wash: rgba(221, 76, 79, 0.09);
+
+	/* Atkinson-era webfonts are gone; system stacks load instantly and match
+	   how the rest of the projects look */
+	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', 'PingFang SC',
+		'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+	--font-serif: ui-serif, 'New York', 'Iowan Old Style', Palatino, Georgia, 'Songti SC',
+		'Noto Serif CJK SC', serif;
+	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+		monospace;
+
+	--measure: 44rem;
+	--gutter: clamp(1.15rem, 4vw, 2.25rem);
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		--paper: #151412;
+		--paper-sunk: #1e1c19;
+		--ink: #ede8e0;
+		--ink-soft: #c8c2b8;
+		--muted: #8a857c;
+		--rule: #2a2724;
+
+		--accent: #dd4c4f;
+		--accent-ink: #e4655f;
+		--accent-wash: rgba(221, 76, 79, 0.16);
+	}
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
+
+/* ── base ───────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
+
+html {
+	-webkit-text-size-adjust: 100%;
+	scroll-behavior: smooth;
+	scrollbar-gutter: stable;
+}
+
 body {
-	font-family: 'Atkinson', sans-serif;
 	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
+	background-color: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-sans);
+	font-size: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+	line-height: 1.72;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 }
+
+/* Paper grain. Multiply over light surfaces is what reads as "fibre"; on the
+   charcoal dark theme it would just look like dust, so it is switched off.
+   The alpha row adds R+G+B (they are equal in greyscale noise, so the factor is
+   three times the written coefficient) — hence 0.1, not something larger. */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	opacity: 0.15;
+	mix-blend-mode: multiply;
+	background-repeat: repeat;
+	background-size: 160px 160px;
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='g'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.85'%20numOctaves='4'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='matrix'%20values='0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0,0'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) body::before {
+		display: none;
+	}
+}
+
+::selection {
+	background: var(--accent-wash);
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+/* ── layout ─────────────────────────────────────────────────────────────── */
+
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+	flex: 1 0 auto;
 }
+
+.wrap {
+	width: 100%;
+	max-width: var(--measure);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
+}
+
+.rule {
+	border: 0;
+	border-top: 1px solid var(--rule);
+	margin: 2.75rem 0;
+}
+
+.skip {
+	position: absolute;
+	left: -9999px;
+}
+
+.skip:focus {
+	left: var(--gutter);
+	top: 0.75rem;
+	z-index: 3;
+	background: var(--paper);
+	padding: 0.5rem 0.9rem;
+	border: 1px solid var(--rule);
+	border-radius: 6px;
+	color: var(--ink);
+}
+
+/* ── typography ─────────────────────────────────────────────────────────── */
+
 h1,
 h2,
 h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
 h4 {
-	font-size: 1.563em;
+	margin: 0 0 0.55em;
+	color: var(--ink);
+	font-weight: 600;
+	line-height: 1.16;
+	letter-spacing: -0.022em;
+	text-wrap: balance;
 }
-h5 {
-	font-size: 1.25em;
+
+h1 {
+	font-size: clamp(1.95rem, 1.45rem + 1.9vw, 2.9rem);
+	letter-spacing: -0.038em;
 }
-strong,
-b {
-	font-weight: 700;
+
+h2 {
+	font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.6rem);
 }
-a {
-	color: var(--accent);
+
+h3 {
+	font-size: 1.18rem;
 }
-a:hover {
-	color: var(--accent);
-}
+
 p {
-	margin-bottom: 1em;
+	margin: 0 0 1.15em;
 }
-.prose p {
-	margin-bottom: 2em;
+
+/* The small caps-ish label used for dates, section markers and metadata. */
+.eyebrow {
+	margin: 0 0 0.9rem;
+	color: var(--muted);
+	font-size: 0.735rem;
+	font-weight: 600;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
 }
-textarea {
-	width: 100%;
-	font-size: 16px;
+
+.eyebrow .dot {
+	display: inline-block;
+	width: 0.42em;
+	height: 0.42em;
+	margin-right: 0.6em;
+	border-radius: 50%;
+	background: var(--accent);
+	vertical-align: 0.06em;
 }
-input {
-	font-size: 16px;
+
+/* Serif italic is the counterweight to the sans headings — used for decks,
+   asides and pull quotes, never for body copy. */
+.serif-note {
+	margin: 0;
+	color: var(--ink-soft);
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-size: 1.075rem;
+	line-height: 1.62;
 }
-table {
-	width: 100%;
+
+/* ── links ──────────────────────────────────────────────────────────────── */
+
+a {
+	color: var(--accent-ink);
+	text-underline-offset: 0.17em;
+	text-decoration-thickness: 1px;
+	text-decoration-color: color-mix(in srgb, var(--accent-ink) 42%, transparent);
+	transition: text-decoration-color 0.15s ease, text-decoration-thickness 0.15s ease;
 }
-img {
+
+a:hover {
+	text-decoration-color: var(--accent-ink);
+	text-decoration-thickness: 1.5px;
+}
+
+/* ── prose: everything rendered out of markdown ─────────────────────────── */
+
+.prose {
+	font-size: 1.0125rem;
+	line-height: 1.78;
+}
+
+.prose > *:first-child {
+	margin-top: 0;
+}
+
+.prose h2 {
+	margin: 2.4em 0 0.6em;
+	padding-top: 0.1em;
+}
+
+.prose h3 {
+	margin: 2em 0 0.5em;
+}
+
+.prose ul,
+.prose ol {
+	margin: 0 0 1.2em;
+	padding-left: 1.35em;
+}
+
+.prose li {
+	margin-bottom: 0.4em;
+}
+
+.prose li::marker {
+	color: var(--muted);
+}
+
+.prose strong {
+	font-weight: 640;
+	color: var(--ink);
+}
+
+.prose hr {
+	border: 0;
+	border-top: 1px solid var(--rule);
+	margin: 2.6rem 0;
+}
+
+.prose blockquote {
+	margin: 1.9rem 0;
+	padding: 0.15rem 0 0.15rem 1.15rem;
+	border-left: 2px solid var(--accent);
+	color: var(--ink-soft);
+	font-family: var(--font-serif);
+	font-style: italic;
+	font-size: 1.06rem;
+}
+
+.prose blockquote p:last-child {
+	margin-bottom: 0;
+}
+
+.prose code {
+	padding: 0.14em 0.38em;
+	background: var(--paper-sunk);
+	border: 1px solid var(--rule);
+	border-radius: 4px;
+	font-family: var(--font-mono);
+	font-size: 0.855em;
+}
+
+.prose pre {
+	margin: 1.7rem 0;
+	padding: 1.1rem 1.2rem;
+	background: var(--paper-sunk) !important;
+	border: 1px solid var(--rule);
+	border-radius: 8px;
+	overflow-x: auto;
+	line-height: 1.6;
+}
+
+.prose pre code {
+	padding: 0;
+	background: none;
+	border: 0;
+	font-size: 0.845rem;
+}
+
+.prose img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
+	border: 1px solid var(--rule);
 }
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+
+.prose table {
+	width: 100%;
+	margin: 1.7rem 0;
+	border-collapse: collapse;
+	font-size: 0.905rem;
 }
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
+
+.prose th,
+.prose td {
+	padding: 0.55em 0.7em;
+	border-bottom: 1px solid var(--rule);
+	text-align: left;
 }
-pre > code {
-	all: unset;
+
+.prose th {
+	color: var(--muted);
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
 }
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+
+.prose a {
+	overflow-wrap: anywhere;
 }
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
-}
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
+
+/* Shiki dual themes: <pre> carries both palettes as custom properties. */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) .prose .astro-code,
+	:root:not([data-theme='light']) .prose .astro-code span {
+		color: var(--shiki-dark) !important;
+		font-style: var(--shiki-dark-font-style) !important;
+		font-weight: var(--shiki-dark-font-weight) !important;
+		text-decoration: var(--shiki-dark-text-decoration) !important;
 	}
 }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto seperate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+/* ── motion ─────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.001ms !important;
+		transition-duration: 0.001ms !important;
+	}
 }

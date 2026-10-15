@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../consts';
+---
+
+<BaseLayout title="Not found" description="That page doesn't exist.">
+	<p class="eyebrow">404</p>
+	<h1>Nothing lives here.</h1>
+	<p class="serif-note note">
+		The page you asked for either moved or was never here. The writing index is probably what
+		you wanted.
+	</p>
+	<p class="links">
+		<a href={href('/writing/')}>All writing</a>
+		<a href={href('/')}>Home</a>
+	</p>
+</BaseLayout>
+
+<style>
+	.note {
+		max-width: 30rem;
+		margin-top: 1rem;
+	}
+
+	.links {
+		display: flex;
+		gap: 1.4rem;
+		margin-top: 2.2rem;
+		font-size: 0.95rem;
+	}
+</style>

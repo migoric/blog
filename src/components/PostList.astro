@@ -1,0 +1,97 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import { href } from '../consts';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="post-list">
+	{
+		posts.map((post) => (
+			<li>
+				<span class="when">
+					<FormattedDate date={post.data.pubDate} />
+				</span>
+				<h3 class="what">
+					<a href={href(`/writing/${post.id}/`)}>{post.data.title}</a>
+				</h3>
+				<p class="desc">{post.data.description}</p>
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.post-list {
+		display: grid;
+		gap: 1.9rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.post-list li {
+		display: grid;
+		grid-template-columns: 7.25rem 1fr;
+		column-gap: 1.5rem;
+	}
+
+	.when {
+		grid-column: 1;
+		grid-row: 1 / span 2;
+		padding-top: 0.34rem;
+		color: var(--muted);
+		font-size: 0.775rem;
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.02em;
+	}
+
+	.what {
+		grid-column: 2;
+		margin: 0 0 0.22rem;
+		font-size: 1.115rem;
+		letter-spacing: -0.015em;
+	}
+
+	.what a {
+		color: var(--ink);
+		text-decoration: none;
+	}
+
+	.what a:hover {
+		text-decoration: underline;
+		text-decoration-color: var(--accent);
+		text-decoration-thickness: 1.5px;
+		text-underline-offset: 0.2em;
+	}
+
+	.desc {
+		grid-column: 2;
+		margin: 0;
+		color: var(--ink-soft);
+		font-size: 0.925rem;
+		line-height: 1.62;
+	}
+
+	@media (max-width: 34rem) {
+		.post-list li {
+			grid-template-columns: 1fr;
+		}
+
+		.when {
+			grid-row: auto;
+			padding-top: 0;
+			margin-bottom: 0.2rem;
+		}
+
+		.what,
+		.desc {
+			grid-column: 1;
+		}
+	}
+</style>

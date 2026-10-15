@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const summary =
+	posts.length === 1 ? 'One post so far.' : `${posts.length} posts so far, newest first.`;
+---
+
+<BaseLayout title="Writing" description="Everything published on this site, newest first.">
+	<header class="page-head">
+		<h1>Writing</h1>
+		<p class="serif-note">{summary}</p>
+	</header>
+
+	{
+		posts.length > 0 ? (
+			<PostList posts={posts} />
+		) : (
+			<p class="serif-note">Nothing published yet.</p>
+		)
+	}
+</BaseLayout>
+
+<style>
+	.page-head {
+		margin-bottom: 2.6rem;
+	}
+
+	.page-head h1 {
+		margin-bottom: 0.5rem;
+	}
+</style>

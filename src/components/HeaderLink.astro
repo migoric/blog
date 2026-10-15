@@ -3,22 +3,22 @@ import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'a'>;
 
-const { href, class: className, ...props } = Astro.props;
+const { href: to = '/', class: className, ...rest } = Astro.props;
 
-const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, '');
+// `href` on an anchor is typed as string | URL | undefined, so narrow it first.
+const target = typeof to === 'string' ? to : (to?.toString() ?? '/');
+
+// Paths arrive with the base already applied, so a plain equality check is
+// enough once the trailing slash is normalised away.
+const strip = (path: string) => path.replace(/\/+$/, '') || '/';
+const isActive = strip(Astro.url.pathname) === strip(target);
 ---
 
-<a href={href} class:list={[className, { active: isActive }]} {...props}>
+<a
+	href={to}
+	class:list={[className, { active: isActive }]}
+	aria-current={isActive ? 'page' : undefined}
+	{...rest}
+>
 	<slot />
 </a>
-<style>
-	a {
-		display: inline-block;
-		text-decoration: none;
-	}
-	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
-	}
-</style>

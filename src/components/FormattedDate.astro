@@ -4,14 +4,14 @@ interface Props {
 }
 
 const { date } = Astro.props;
+
+// timeZone is pinned so the rendered day never depends on where the build ran.
+const label = date.toLocaleDateString('en-GB', {
+	day: '2-digit',
+	month: 'short',
+	year: 'numeric',
+	timeZone: 'UTC',
+});
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
-</time>
+<time datetime={date.toISOString()}>{label}</time>
