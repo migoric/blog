@@ -1,6 +1,6 @@
-# retrychx / blog
+# migoric / blog
 
-Source for <https://retrychx.github.io/blog> — a small static blog about building desktop tools and
+Source for <https://migoric.github.io/blog> — a small static blog about building desktop tools and
 agent systems.
 
 Built with [Astro](https://astro.build) (static output) and deployed to GitHub Pages by
