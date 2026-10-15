@@ -14,12 +14,12 @@ export function href(path = '/'): string {
 }
 
 export const SITE = {
-	title: 'retrychx',
+	title: 'migoric',
 	tagline: 'Notes on small tools, desktop apps, and agent systems.',
 	description:
 		'Occasional notes on building small, sharp tools — native macOS apps, agent frameworks, and the unglamorous parts in between.',
-	author: 'retrychx',
-	url: 'https://retrychx.github.io',
+	author: 'migoric',
+	url: 'https://migoric.github.io',
 } as const;
 
 export const NAV = [
@@ -29,21 +29,21 @@ export const NAV = [
 ] as const;
 
 export const LINKS = [
-	{ href: 'https://github.com/retrychx', label: 'GitHub' },
-	{ href: 'https://github.com/retrychx/Meditor', label: 'Meditor' },
-	{ href: 'https://github.com/retrychx/agentia', label: 'agentia' },
+	{ href: 'https://github.com/migoric', label: 'GitHub' },
+	{ href: 'https://github.com/migoric/Meditor', label: 'Meditor' },
+	{ href: 'https://github.com/migoric/agentia', label: 'agentia' },
 ] as const;
 
 export const PROJECTS = [
 	{
 		name: 'Meditor',
-		href: 'https://github.com/retrychx/Meditor',
+		href: 'https://github.com/migoric/Meditor',
 		description: 'A native macOS Markdown editor with a built-in AI agent.',
 		stack: 'Swift · SwiftUI',
 	},
 	{
 		name: 'agentia',
-		href: 'https://github.com/retrychx/agentia',
+		href: 'https://github.com/migoric/agentia',
 		description: 'A declarative framework for agent services, with tracing and cost observability.',
 		stack: 'TypeScript',
 	},

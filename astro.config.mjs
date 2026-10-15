@@ -4,8 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	// Project site: served from https://retrychx.github.io/blog
-	site: 'https://retrychx.github.io',
+	// Project site: served from https://migoric.github.io/blog
+	site: 'https://migoric.github.io',
 	base: '/blog',
 
 	integrations: [mdx(), sitemap()],
