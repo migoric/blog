@@ -41,7 +41,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 				PROJECTS.map((project) => (
 					<li>
 						<h3 class="name">
-							<a href={project.href}>{project.name}</a>
+							{project.href ? <a href={project.href}>{project.name}</a> : project.name}
 						</h3>
 						<p class="stack">{project.stack}</p>
 						<p class="desc">{project.description}</p>

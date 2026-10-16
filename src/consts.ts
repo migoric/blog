@@ -32,9 +32,26 @@ export const LINKS = [
 	{ href: 'https://github.com/migoric', label: 'GitHub' },
 	{ href: 'https://github.com/migoric/Meditor', label: 'Meditor' },
 	{ href: 'https://github.com/migoric/agentia', label: 'agentia' },
+	{ href: 'https://github.com/migoric/jianxun', label: 'jianxun' },
 ] as const;
 
-export const PROJECTS = [
+/**
+ * Projects, shown on the home page and (from this list) in About's "What I'm building".
+ *
+ * One list, not two: About used to hard-code its own copy, so every change had to be made
+ * twice — which is how two sections of the same site end up describing it differently.
+ *
+ * `href` is optional. A project whose repository is still private gets no link: a link to a
+ * private repo 404s for everyone but the owner.
+ */
+export interface Project {
+	name: string;
+	href?: string;
+	description: string;
+	stack: string;
+}
+
+export const PROJECTS: readonly Project[] = [
 	{
 		name: 'Meditor',
 		href: 'https://github.com/migoric/Meditor',
@@ -47,4 +64,16 @@ export const PROJECTS = [
 		description: 'A declarative framework for agent services, with tracing and cost observability.',
 		stack: 'TypeScript',
 	},
-] as const;
+	{
+		name: 'jianxun · 简讯',
+		href: 'https://github.com/migoric/jianxun',
+		description: 'An AI news digest across 48 Chinese and English sources, clustered into narrative threads.',
+		stack: 'TypeScript · Cloudflare',
+	},
+	{
+		// No href on purpose — the repository is private for now.
+		name: 'aquarelle',
+		description: 'An iOS watercolour studio driven by an on-device agent.',
+		stack: 'Swift · SwiftUI',
+	},
+];

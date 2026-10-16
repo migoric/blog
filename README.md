@@ -37,7 +37,8 @@ npm run preview  # serve the built output
 
 - Everything is served from a sub-path (`base: '/blog'`), so internal links must go through
   `href()` in `src/consts.ts` — hand-written paths are not rewritten by Astro and will 404.
-- Site identity, navigation and outbound links live in `src/consts.ts`.
+- Site identity, navigation, outbound links and the **project list** live in `src/consts.ts`. The
+  home page and About both render that one list, so the two sections can't disagree.
 - Design tokens live at the top of `src/styles/global.css`; light and dark are two sets of the same
   token names. Prose styles for rendered Markdown also belong there, since that markup comes from
   the renderer rather than from a component.

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { LINKS, href } from '../consts';
+import { LINKS, PROJECTS, href } from '../consts';
 ---
 
 <BaseLayout
@@ -27,14 +27,15 @@ import { LINKS, href } from '../consts';
 
 		<h2>What I'm building</h2>
 
+		{/* Rendered from the same list as the home page — see the note in `consts.ts`. */}
 		<ul>
-			<li>
-				<strong>Meditor</strong> — a native macOS Markdown editor with a built-in AI agent.
-			</li>
-			<li>
-				<strong>agentia</strong> — a declarative framework for agent services, with tracing
-				and cost observability.
-			</li>
+			{
+				PROJECTS.map((project) => (
+					<li>
+						<strong>{project.name}</strong> — {project.description}
+					</li>
+				))
+			}
 		</ul>
 
 		<h2>How I work</h2>
