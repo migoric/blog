@@ -55,7 +55,8 @@ export const PROJECTS: readonly Project[] = [
 	{
 		name: 'Meditor',
 		href: 'https://github.com/migoric/Meditor',
-		description: 'A native macOS Markdown editor with a built-in AI agent.',
+		description:
+			'An agent-native document workstation for people who write technical docs — the agent edits, the preview renders instantly, you iterate.',
 		stack: 'Swift · SwiftUI',
 	},
 	{
