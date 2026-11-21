@@ -32,6 +32,7 @@ export const LINKS = [
 	{ href: 'https://github.com/migoric', label: 'GitHub' },
 	{ href: 'https://github.com/migoric/Meditor', label: 'Meditor' },
 	{ href: 'https://github.com/migoric/agentia', label: 'agentia' },
+	{ href: 'https://github.com/migoric/agentia-harness', label: 'agentia-harness' },
 	{ href: 'https://github.com/migoric/jianxun', label: 'jianxun' },
 ] as const;
 
@@ -63,6 +64,13 @@ export const PROJECTS: readonly Project[] = [
 		name: 'agentia',
 		href: 'https://github.com/migoric/agentia',
 		description: 'A declarative framework for agent services, with tracing and cost observability.',
+		stack: 'TypeScript',
+	},
+	{
+		name: 'agentia-harness',
+		href: 'https://github.com/migoric/agentia-harness',
+		description:
+			'The eval and self-improvement loop around those services: multi-turn cases, a holdout gate, and a ledger of what each change predicted before it was tried.',
 		stack: 'TypeScript',
 	},
 	{
